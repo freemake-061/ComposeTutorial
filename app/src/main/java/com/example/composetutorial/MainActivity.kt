@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.composetutorial.ui.theme.ComposeTutorialTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Spacer
@@ -37,8 +38,12 @@ data class Message(val author: String, val body: String)
 
 @Composable
 fun MessageCard(msg: Message) {
-    // Add padding around our message
-    Row(modifier = Modifier.padding(all = 8.dp)) {
+    Row(
+        // Add padding around our message
+        modifier = Modifier.padding(all = 8.dp),
+        // Add a horizontal space between the image and the column
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         Image(
             painter = painterResource(R.drawable.profile_picture),
             contentDescription = "Contact profile picture",
@@ -49,13 +54,8 @@ fun MessageCard(msg: Message) {
                 .clip(CircleShape)
         )
 
-        // Add a horizontal space between the image and the column
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = msg.author)
-            // Add a vertical space between the author and message texts
-            Spacer(modifier = Modifier.height(4.dp))
             Text(text = msg.body)
         }
     }
