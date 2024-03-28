@@ -29,15 +29,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MessageCard(Message("Android", "Jetpack Compose"))
+            ComposeTutorialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    MessageCard(Message1("Android", "Jetpack Compose"),Message2(1, 2))
+                }
+            }
         }
     }
 }
 
-data class Message(val author: String, val body: String)
+data class Message1(val author: String, val body: String)
+data class Message2(val count1: Int, val count2: Int)
 
 @Composable
-fun MessageCard(msg: Message) {
+fun MessageCard(msg1: Message1, msg2: Message2) {
     Row(
         // Add padding around our message
         modifier = Modifier.padding(all = 8.dp),
@@ -55,8 +60,10 @@ fun MessageCard(msg: Message) {
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(text = msg.author)
-            Text(text = msg.body)
+            Text(msg1.author)
+            Text(msg1.body)
+            Text(msg2.count1.toString())
+            Text(msg2.count2.toString())
         }
     }
 }
@@ -64,8 +71,10 @@ fun MessageCard(msg: Message) {
 @Preview
 @Composable
 fun PreviewMessageCard() {
-    MessageCard(
-        msg = Message("Lexi", "Hey, take a look at Jetpack Compose, it's great!")
-    )
+    ComposeTutorialTheme {
+        Surface {
+            MessageCard(Message1("Lexi", "Take a look at Jetpack Compose, it's great!"), Message2(1, 2))
+        }
+    }
 }
 
