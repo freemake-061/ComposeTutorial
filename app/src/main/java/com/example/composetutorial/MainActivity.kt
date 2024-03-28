@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +23,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.border
+import androidx.compose.material3.MaterialTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,13 +58,18 @@ fun MessageCard(msg1: Message1, msg2: Message2) {
                 .size(40.dp)
                 // Clip image to be shaped as a circle
                 .clip(CircleShape)
+                .border(1.5.dp, MaterialTheme.colorScheme.primary,CircleShape)
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(msg1.author)
-            Text(msg1.body)
-            Text(msg2.count1.toString())
-            Text(msg2.count2.toString())
+            Text(
+                text = msg1.author,
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleSmall
+            )
+            Text(text = msg1.body)
+            Text(text = msg2.count1.toString())
+            Text(text = msg2.count2.toString())
         }
     }
 }
