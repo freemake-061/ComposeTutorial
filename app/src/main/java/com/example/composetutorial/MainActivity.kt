@@ -15,16 +15,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.res.painterResource
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.border
 import androidx.compose.material3.MaterialTheme
+import android.content.res.Configuration
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,18 +30,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeTutorialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    MessageCard(Message1("Android", "Jetpack Compose"),Message2(1, 2))
+                    MessageCard(Message("Android", "Jetpack Compose"))
                 }
             }
         }
     }
 }
 
-data class Message1(val author: String, val body: String)
-data class Message2(val count1: Int, val count2: Int)
+data class Message(val author: String, val body: String)
 
 @Composable
-fun MessageCard(msg1: Message1, msg2: Message2) {
+fun MessageCard(msg: Message) {
     Row(
         // Add padding around our message
         modifier = Modifier.padding(all = 8.dp),
@@ -58,28 +55,37 @@ fun MessageCard(msg1: Message1, msg2: Message2) {
                 .size(40.dp)
                 // Clip image to be shaped as a circle
                 .clip(CircleShape)
-                .border(1.5.dp, MaterialTheme.colorScheme.primary,CircleShape)
+                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                text = msg1.author,
+                text = msg.author,
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall
             )
-            Text(text = msg1.body)
-            Text(text = msg2.count1.toString())
-            Text(text = msg2.count2.toString())
+            Surface(shape = MaterialTheme.shapes.medium, shadowElevation = 1.5.dp) {
+                Text(
+                    text = msg.body,
+                    modifier = Modifier.padding(all = 4.dp),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }
 
-@Preview
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode"
+)
 @Composable
 fun PreviewMessageCard() {
     ComposeTutorialTheme {
         Surface {
-            MessageCard(Message1("Lexi", "Take a look at Jetpack Compose, it's great!"), Message2(1, 2))
+            MessageCard(Message("Lexi", "Take a look at Jetpack Compose, it's great!"))
         }
     }
 }
