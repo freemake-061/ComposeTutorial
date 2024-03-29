@@ -22,9 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.border
 import androidx.compose.material3.MaterialTheme
-import android.content.res.Configuration
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +36,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeTutorialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    MessageCard(Message("Android", "Jetpack Compose"))
+                    Conversation(SampleData.conversationSample)
                 }
             }
         }
@@ -60,7 +64,14 @@ fun MessageCard(msg: Message) {
                 .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
 
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        // We keep track if the message is expanded or not in this
+        // variable
+        var isExpanded by remember {mutableStateOf(false)}
+
+        // We toggle the isExpanded variable when we click on this Column
+        Column(
+            modifier = Modifier.clickable {isExpanded = !isExpanded},
+            verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = msg.author,
                 color = MaterialTheme.colorScheme.secondary,
@@ -70,6 +81,9 @@ fun MessageCard(msg: Message) {
                 Text(
                     text = msg.body,
                     modifier = Modifier.padding(all = 4.dp),
+                    // If the message is expanded, we display all its content
+                    // otherwise we only display the first line
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -92,78 +106,4 @@ fun PreviewConversation() {
     ComposeTutorialTheme {
         Conversation(SampleData.conversationSample)
     }
-}
-
-/**
- * SampleData for Jetpack Compose Tutorial
- */
-object SampleData {
-    // Sample conversation data
-    val conversationSample = listOf(
-        Message(
-            "Lexi",
-            "Test...Test...Test..."
-        ),
-        Message(
-            "Lexi",
-            """List of Android versions:
-            |Android KitKat (API 19)
-            |Android Lollipop (API 21)
-            |Android Marshmallow (API 23)
-            |Android Nougat (API 24)
-            |Android Oreo (API 26)
-            |Android Pie (API 28)
-            |Android 10 (API 29)
-            |Android 11 (API 30)
-            |Android 12 (API 31)""".trim()
-        ),
-        Message(
-            "Lexi",
-            """I think Kotlin is my favorite programming language.
-            |It's so much fun!""".trim()
-        ),
-        Message(
-            "Lexi",
-            "Searching for alternatives to XML layouts..."
-        ),
-        Message(
-            "Lexi",
-            """Hey, take a look at Jetpack Compose, it's great!
-            |It's the Android's modern toolkit for building native UI.
-            |It simplifies and accelerates UI development on Android.
-            |Less code, powerful tools, and intuitive Kotlin APIs :)""".trim()
-        ),
-        Message(
-            "Lexi",
-            "It's available from API 21+ :)"
-        ),
-        Message(
-            "Lexi",
-            "Writing Kotlin for UI seems so natural, Compose where have you been all my life?"
-        ),
-        Message(
-            "Lexi",
-            "Android Studio next version's name is Arctic Fox"
-        ),
-        Message(
-            "Lexi",
-            "Android Studio Arctic Fox tooling for Compose is top notch ^_^"
-        ),
-        Message(
-            "Lexi",
-            "I didn't know you can now run the emulator directly from Android Studio"
-        ),
-        Message(
-            "Lexi",
-            "Compose Previews are great to check quickly how a composable layout looks like"
-        ),
-        Message(
-            "Lexi",
-            "Previews are also interactive after enabling the experimental setting"
-        ),
-        Message(
-            "Lexi",
-            "Have you tried writing build.gradle with KTS?"
-        ),
-    )
 }
