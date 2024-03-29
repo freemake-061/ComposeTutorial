@@ -29,6 +29,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +70,10 @@ fun MessageCard(msg: Message) {
         // variable
         var isExpanded by remember {mutableStateOf(false)}
 
+        val surfaceColor by animateColorAsState(
+            if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+        )
+
         // We toggle the isExpanded variable when we click on this Column
         Column(
             modifier = Modifier.clickable {isExpanded = !isExpanded},
@@ -77,7 +83,14 @@ fun MessageCard(msg: Message) {
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall
             )
-            Surface(shape = MaterialTheme.shapes.medium, shadowElevation = 1.5.dp) {
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                shadowElevation = 1.5.dp,
+                // surfaceColor color will be changing gradually from primary to surface
+                color = surfaceColor,
+                // animateContentSize will change the Surface size gradually
+                modifier = Modifier.animateContentSize().padding(1.dp)
+            ) {
                 Text(
                     text = msg.body,
                     modifier = Modifier.padding(all = 4.dp),
